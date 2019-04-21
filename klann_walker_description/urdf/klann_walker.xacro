@@ -9,8 +9,28 @@
   <xacro:property name="height1" value="2" /> <!-- frame -->
   <xacro:property name="height2" value="1" /> <!-- crank -->
   <xacro:property name="height3" value="1" /> <!-- connecting_rod -->
-
   <xacro:property name="axel_offset" value="0.05" /> <!-- Space btw top of beam and the each joint -->
+
+  <xacro:property name="crank_to_arms_X" value="0.26616" /> <!-- Frame joints. Distance from crank joint to horizontal line between roker arms   -->
+  <xacro:property name="arm2_to_crankY" value="0.130" /> <!-- Frame joints. Distance from second (bottom) roker arm joint to crank joint    -->
+  <xacro:property name="arm1_to_crankY" value="0.6145" /> <!-- Frame joints. Distance from first (top) roker arm joint to crank joint    -->
+  
+  <xacro:property name="frame_width" value="crank_to_arms_X" /> <!-- frame width -->
+  <xacro:property name="frame_height" value="arm1_to_crankY + arm1_to_crankY" /> <!-- frame height -->
+
+  <xacro:property name="crank_len" value="1" /> <!-- length of crank -->
+
+  <xacro:property name="connecting_rod_upper_len" value="0.288" /> <!-- Connecting_rod joints. Distance between crank and elbow joints -->
+  <xacro:property name="connecting_rod_lower_len" value="0.222" /> <!-- Connecting_rod joints. Distance between elbow and knee joints -->
+  <xacro:property name="connecting_rod_angle" value="PI*170/360" /> <!-- Elbow angle. Angle between upper and lower parts of rod -->
+
+  <xacro:property name="first_rocket_arm_len" value="0.182" /> <!-- Rocket arms. Distance between frame and hip joints -->
+  <xacro:property name="second_rocket_arm_len" value="arm2_to_crankY" /> <!-- Rocket arms. Distance between frame and elbow joints -->
+  
+  <xacro:property name="leg_upper_len" value="0.265" /> <!-- Leg joints. Distance between hip and knee joints -->
+  <xacro:property name="leg_lower_len" value="0.490" /> <!-- Leg joints. Distance between knee joint and the end of the leg -->
+  <xacro:property name="leg_angle" value="PI*170/360" /> <!-- Knee angle. Angle between upper and lower parts of the rod -->
+  
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
   <xacro:include filename="$(find klann_walker_description)/urdf/klann_walker.gazebo" />
