@@ -5,31 +5,31 @@
   <!-- Constants for robot dimensions -->
   <xacro:property name="PI" value="3.1415926535897931"/>
   <xacro:property name="mass" value="1" /> <!-- arbitrary value for mass -->
-  <xacro:property name="width" value="0.1" /> <!-- Square dimensions (widthxwidth) of beams -->
+  <xacro:property name="width" value="0.01" /> <!-- Square dimensions (widthxwidth) of beams -->
   <xacro:property name="height1" value="2" /> <!-- frame -->
   <xacro:property name="height2" value="1" /> <!-- crank -->
   <xacro:property name="height3" value="1" /> <!-- connecting_rod -->
-  <xacro:property name="axel_offset" value="0.05" /> <!-- Space btw top of beam and the each joint -->
+  <xacro:property name="axel_offset" value="0.5" /> <!-- Space btw top of beam and the each joint -->
 
-  <xacro:property name="crank_to_arms_X" value="0.26616" /> <!-- Frame joints. Distance from crank joint to horizontal line between roker arms   -->
-  <xacro:property name="arm2_to_crankY" value="0.130" /> <!-- Frame joints. Distance from second (bottom) roker arm joint to crank joint    -->
+  <xacro:property name="crank_to_arms_X" value="2.6616" /> <!-- Frame joints. Distance from crank joint to horizontal line between roker arms   -->
+  <xacro:property name="arm2_to_crankY" value="1.30" /> <!-- Frame joints. Distance from second (bottom) roker arm joint to crank joint    -->
   <xacro:property name="arm1_to_crankY" value="0.6145" /> <!-- Frame joints. Distance from first (top) roker arm joint to crank joint    -->
   
-  <xacro:property name="frame_width" value="crank_to_arms_X" /> <!-- frame width -->
-  <xacro:property name="frame_height" value="arm1_to_crankY + arm1_to_crankY" /> <!-- frame height -->
+  <xacro:property name="frame_width" value="${crank_to_arms_X}" /> <!-- frame width -->
+  <xacro:property name="frame_height" value="${arm1_to_crankY + arm1_to_crankY}" /> <!-- frame height -->
 
-  <xacro:property name="crank_len" value="1" /> <!-- length of crank -->
+  <xacro:property name="crank_len" value="0.110" /> <!-- length of crank -->
 
-  <xacro:property name="connecting_rod_upper_len" value="0.288" /> <!-- Connecting_rod joints. Distance between crank and elbow joints -->
-  <xacro:property name="connecting_rod_lower_len" value="0.222" /> <!-- Connecting_rod joints. Distance between elbow and knee joints -->
-  <xacro:property name="connecting_rod_angle" value="PI*170/360" /> <!-- Elbow angle. Angle between upper and lower parts of rod -->
+  <xacro:property name="connecting_rod_upper_len" value="2.88" /> <!-- Connecting_rod joints. Distance between crank and elbow joints -->
+  <xacro:property name="connecting_rod_lower_len" value="2.22" /> <!-- Connecting_rod joints. Distance between elbow and knee joints -->
+  <xacro:property name="connecting_rod_angle" value="${PI*170/360}" /> <!-- Elbow angle. Angle between upper and lower parts of rod -->
 
-  <xacro:property name="first_rocket_arm_len" value="0.182" /> <!-- Rocket arms. Distance between frame and hip joints -->
-  <xacro:property name="second_rocket_arm_len" value="arm2_to_crankY" /> <!-- Rocket arms. Distance between frame and elbow joints -->
+  <xacro:property name="first_rocket_arm_len" value="1.82" /> <!-- Rocket arms. Distance between frame and hip joints -->
+  <xacro:property name="second_rocket_arm_len" value="${arm2_to_crankY}" /> <!-- Rocket arms. Distance between frame and elbow joints -->
   
-  <xacro:property name="leg_upper_len" value="0.265" /> <!-- Leg joints. Distance between hip and knee joints -->
-  <xacro:property name="leg_lower_len" value="0.490" /> <!-- Leg joints. Distance between knee joint and the end of the leg -->
-  <xacro:property name="leg_angle" value="PI*170/360" /> <!-- Knee angle. Angle between upper and lower parts of the rod -->
+  <xacro:property name="leg_upper_len" value="2.65" /> <!-- Leg joints. Distance between hip and knee joints -->
+  <xacro:property name="leg_lower_len" value="4.90" /> <!-- Leg joints. Distance between knee joint and the end of the leg -->
+  <xacro:property name="leg_angle" value="${PI*170/360}" /> <!-- Knee angle. Angle between upper and lower parts of the rod -->
   
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
@@ -48,26 +48,26 @@
   <!-- Base Link -->
   <link name="frame">
     <collision>
-      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${frame_height/2}" rpy="0 0 0"/>
       <geometry>
-	<box size="${width} ${width} ${height1}"/>
+	<box size="${frame_width} ${width} ${frame_height}"/>
       </geometry>
     </collision>
 
     <visual>
-      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${frame_height/2}" rpy="0 0 0"/>
       <geometry>
-	<box size="${width} ${width} ${height1}"/>
+	<box size="${frame_width} ${width} ${frame_height}"/>
       </geometry>
       <material name="orange"/>
     </visual>
 
     <inertial>
-      <origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${frame_height/2}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-	  ixx="${mass / 12.0 * (width*width + height1*height1)}" ixy="0.0" ixz="0.0"
-	  iyy="${mass / 12.0 * (height1*height1 + width*width)}" iyz="0.0"
+	  ixx="${mass / 12.0 * (width*width + frame_height*frame_height)}" ixy="0.0" ixz="0.0"
+	  iyy="${mass / 12.0 * (frame_height*frame_height + width*width)}" iyz="0.0"
 	  izz="${mass / 12.0 * (width*width + width*width)}"/>
     </inertial>
   </link>
@@ -75,7 +75,7 @@
   <joint name="crank_joint" type="continuous">
     <parent link="frame"/>
     <child link="crank"/>
-    <origin xyz="0 ${width} ${height1 - axel_offset}" rpy="0 0 0"/>
+    <origin xyz="0 ${-2*width} ${frame_height - axel_offset}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <dynamics damping="0.7"/>
   </joint>
@@ -83,26 +83,26 @@
   <!-- Middle Link -->
   <link name="crank">
     <collision>
-      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${crank_len/2 - axel_offset}" rpy="0 0 0"/>
       <geometry>
-	<box size="${width} ${width} ${height2}"/>
+	<box size="${width} ${width} ${crank_len}"/>
       </geometry>
     </collision>
 
     <visual>
-      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${crank_len/2 - axel_offset}" rpy="0 0 0"/>
       <geometry>
-	<box size="${width} ${width} ${height2}"/>
+	<box size="${width} ${width} ${crank_len}"/>
       </geometry>
       <material name="black"/>
     </visual>
 
     <inertial>
-      <origin xyz="0 0 ${height2/2 - axel_offset}" rpy="0 0 0"/>
+      <origin xyz="0 0 ${crank_len/2 - axel_offset}" rpy="0 0 0"/>
       <mass value="${mass}"/>
       <inertia
-	  ixx="${mass / 12.0 * (width*width + height2*height2)}" ixy="0.0" ixz="0.0"
-	  iyy="${mass / 12.0 * (height2*height2 + width*width)}" iyz="0.0"
+	  ixx="${mass / 12.0 * (width*width + crank_len*crank_len)}" ixy="0.0" ixz="0.0"
+	  iyy="${mass / 12.0 * (crank_len*crank_len + width*width)}" iyz="0.0"
 	  izz="${mass / 12.0 * (width*width + width*width)}"/>
     </inertial>
   </link>
@@ -110,7 +110,7 @@
   <joint name="crank_shaft" type="continuous">
     <parent link="crank"/>
     <child link="connecting_rod"/>
-    <origin xyz="0 ${width} ${height2 - axel_offset*2}" rpy="0 0 0"/>
+    <origin xyz="0 ${-2*width} ${crank_len - axel_offset*2}" rpy="0 0 0"/>
     <axis xyz="0 1 0"/>
     <dynamics damping="0.7"/>
   </joint>
