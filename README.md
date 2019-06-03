@@ -1,6 +1,8 @@
 # klann_walker
 URDF model for ROS
 
+Project  suspended
+
 * https://en.wikibooks.org/wiki/Klann_linkage
 * http://robotronics09.blogspot.com/2011/01/klann-mechanism.html
 
